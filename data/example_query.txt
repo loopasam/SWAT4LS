@@ -1,0 +1,1 @@
+involved_in some GO_0030193 and expressed_in some NCBI_9606
