@@ -61,14 +61,17 @@ public class Launcher {
 	private static void createUniprot() throws BrainException {
 		// TODO Auto-generated method stub
 		Brain brain = new Brain();
+
+		Brain uniprot = new Brain("http://localhost/", "http://localhost/uniprot.owl");
+
 		System.out.println("learning NCBI");
 		brain.learn("data/NCBI-taxonomy-mammals.owl");
 		System.out.println("Learning GO");
 		brain.learn("data/gene_ontology.owl");
 
-		brain.addObjectProperty("involved_in");
-		brain.addObjectProperty("expressed_in");
-		brain.addClass("Protein");
+		uniprot.addObjectProperty("involved_in");
+		uniprot.addObjectProperty("expressed_in");
+		uniprot.addClass("Protein");
 
 		Random generator = new Random();
 		int id = 0;
@@ -82,16 +85,26 @@ public class Launcher {
 			String randSpecies = species.get(generator.nextInt(species.size()));
 
 			if(roll == 2){
-				brain.addClass("Prot_" + id);
-				brain.subClassOf("Prot_" + id, "Protein");
-				brain.subClassOf("Prot_" + id, "expressed_in some " + randSpecies);
-				brain.subClassOf("Prot_" + id, "involved_in some " + goTerm);
+				uniprot.addClass("Prot_" + id);
+				uniprot.subClassOf("Prot_" + id, "Protein");
+
+				if(!uniprot.knowsClass(randSpecies)){
+					uniprot.addClass(randSpecies);
+				}
+
+				if(!uniprot.knowsClass(goTerm)){
+					uniprot.addClass(goTerm);
+				}
+
+				uniprot.subClassOf("Prot_" + id, "expressed_in some " + randSpecies);
+				uniprot.subClassOf("Prot_" + id, "involved_in some " + goTerm);
 				id++;
 			}
 		}
 
 		System.out.println("saving...");
-		brain.save("data/integrated.owl");
+		uniprot.save("data/uniprot.owl");
+		uniprot.sleep();
 		brain.sleep();
 		System.out.println("done");
 	}
