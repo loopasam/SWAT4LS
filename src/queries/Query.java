@@ -15,5 +15,8 @@ public class Query {
 		brain.learn("data/uniprot.owl");
 		System.out.println("Saving integrated...");
 		brain.save("data/integrated.owl");
+		System.out.println(brain.getSubClasses("involved_in some (regulates some GO_0007596) and expressed_in some NCBI_9606", false));
+		brain.sleep();
+		
 	}
 }

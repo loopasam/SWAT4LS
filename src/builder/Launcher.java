@@ -59,7 +59,6 @@ public class Launcher {
 
 
 	private static void createUniprot() throws BrainException {
-		// TODO Auto-generated method stub
 		Brain brain = new Brain();
 
 		Brain uniprot = new Brain("http://localhost/", "http://localhost/uniprot.owl");
